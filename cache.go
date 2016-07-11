@@ -16,8 +16,8 @@ type Cache struct {
 }
 
 // New returns a new Cache
-func New(c *memcache.Client, exp time.Duration) *Cache {
-	return &Cache{client: c, exp: exp}
+func New(address string, exp time.Duration) *Cache {
+	return &Cache{client: memcache.New(address), exp: exp}
 }
 
 func (c *Cache) Get(key string) (resp []byte, ok bool) {

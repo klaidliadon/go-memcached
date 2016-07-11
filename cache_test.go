@@ -4,8 +4,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/bradfitz/gomemcache/memcache"
-
 	. "gopkg.in/check.v1"
 )
 
@@ -16,8 +14,7 @@ type S struct{}
 var _ = Suite(&S{})
 
 func (s *S) Test(c *C) {
-	client := memcache.New("localhost:11211")
-	cache := New(client, time.Minute*10)
+	cache := New("localhost:11211", time.Minute*10)
 	cache.Indexes()
 
 	key := "testKey"
