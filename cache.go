@@ -4,21 +4,20 @@ package memcached
 
 import (
 	"log"
+	"time"
 
 	"github.com/bradfitz/gomemcache/memcache"
 )
 
 // Cache objects store and retrieve data using Memcached.
 type Cache struct {
-	// couch database where the cache will be stored
 	client *memcache.Client
+	exp    time.Duration
 }
 
 // New returns a new Cache
-func New(c *memcache.Client) *Cache {
-	return &Cache{
-		client: c,
-	}
+func New(c *memcache.Client, exp time.Duration) *Cache {
+	return &Cache{client: c, exp: exp}
 }
 
 func (c *Cache) Get(key string) (resp []byte, ok bool) {
@@ -31,8 +30,9 @@ func (c *Cache) Get(key string) (resp []byte, ok bool) {
 
 func (c *Cache) Set(key string, content []byte) {
 	err := c.client.Set(&memcache.Item{
-		Key:   key,
-		Value: content,
+		Key:        key,
+		Value:      content,
+		Expiration: int32(c.exp.Seconds()),
 	})
 	if err != nil {
 		log.Printf("Can't insert record in memcache: %v\n", err)

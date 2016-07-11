@@ -2,6 +2,7 @@ package memcached
 
 import (
 	"testing"
+	"time"
 
 	"github.com/bradfitz/gomemcache/memcache"
 
@@ -16,7 +17,7 @@ var _ = Suite(&S{})
 
 func (s *S) Test(c *C) {
 	client := memcache.New("localhost:11211")
-	cache := New(client)
+	cache := New(client, time.Minute*10)
 	cache.Indexes()
 
 	key := "testKey"
